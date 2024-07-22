@@ -2,16 +2,15 @@ const { app } = require('@azure/functions');
 const PDFLib = require('../../libraries/pdf-lib.min.js');
 const { Buffer } = require('buffer');
 
-async function MergePDF(pdf) {
+async function MergePDF(pdfObjects) {
     const { PDFDocument } = PDFLib;
     var pdfsToMerge = [];
 
-    for (var j = 0; j < pdf.length; j++) {
-      console.log("hola1");
-        var pdf64 = pdf[j];
-        var pdfBuffer1 = Buffer.from(pdf64, 'base64');
-        pdfsToMerge[j] = pdfBuffer1;
-    }
+    for (var j = 0; j < pdfObjects.length; j++) {
+      var pdf64 = pdfObjects[j].pdf; // Accessing the 'pdf' key
+      var pdfBuffer1 = Buffer.from(pdf64, 'base64');
+      pdfsToMerge[j] = pdfBuffer1;
+  }
 
     const mergedPdf = await PDFDocument.create();
     for (const pdfBytes of pdfsToMerge) {
